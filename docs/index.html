@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>见麦如面</title>
+<meta name="description" content="人在远方，一餐替我回家。给家里人点麦当劳外送的 AI 技能，演示页面使用示例数据。">
+<style>
+:root {
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --text: #1a1a1a;
+  --muted: #6b6b6b;
+  --faint: #9a9a9a;
+  --line: #e7e7e7;
+  --bubble: #f1f1f1;
+  --me: #1a1a1a;
+  --me-text: #ffffff;
+  --accent: #e8761a;
+  --accent-soft: #fdf1e6;
+  --ok: #1e8e3e;
+  --ok-soft: #e6f4ea;
+  --warn: #a15c00;
+  --warn-soft: #fef4dc;
+  --radius: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121212;
+    --surface: #1b1b1b;
+    --text: #ececec;
+    --muted: #a3a3a3;
+    --faint: #777777;
+    --line: #2d2d2d;
+    --bubble: #262626;
+    --me: #ececec;
+    --me-text: #121212;
+    --accent: #f0913d;
+    --accent-soft: #3a2614;
+    --ok: #6dd58c;
+    --ok-soft: #173a22;
+    --warn: #f6c453;
+    --warn-soft: #3a3010;
+  }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.65 -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+main { max-width: 560px; margin: 0 auto; padding: 40px 16px 32px; }
+header h1 { font-size: 26px; font-weight: 600; margin: 0 0 6px; letter-spacing: 0.5px; }
+header p { margin: 0; color: var(--muted); }
+header p.sub { font-size: 14px; color: var(--faint); margin-top: 2px; }
+.tag { display: inline-block; font-size: 12px; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 1px 10px; margin-top: 12px; }
+
+.controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 12px; align-items: center; }
+.chip {
+  font: inherit; font-size: 13px; color: var(--muted); background: transparent;
+  border: 1px solid var(--line); border-radius: 999px; padding: 5px 14px; cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.chip:hover { background: var(--bubble); color: var(--text); }
+.chip[aria-pressed="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
+
+.phone {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 20px;
+  height: 600px; max-height: 76vh; display: flex; flex-direction: column; overflow: hidden;
+}
+.phone-top {
+  display: flex; align-items: center; gap: 10px; padding: 12px 16px;
+  border-bottom: 1px solid var(--line); font-size: 14px;
+}
+.phone-top small { color: var(--faint); font-size: 12px; margin-left: auto; }
+.phone-top .chip { font-size: 12px; padding: 2px 10px; }
+.avatar {
+  width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent);
+  display: grid; place-items: center; font-size: 13px; font-weight: 600; flex: none;
+}
+.chat { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
+
+.row { display: flex; gap: 8px; align-items: flex-end; animation: rise .32s ease-out both; }
+.row.me { justify-content: flex-end; }
+.bubble { max-width: 82%; padding: 9px 13px; border-radius: 16px; background: var(--bubble); word-break: break-word; }
+.me .bubble { background: var(--me); color: var(--me-text); border-bottom-right-radius: 4px; }
+.bot .bubble { border-bottom-left-radius: 4px; }
+.bot .avatar { align-self: flex-start; }
+
+.typing span { display: inline-block; width: 6px; height: 6px; margin: 0 2px; border-radius: 50%; background: var(--faint); animation: blink 1s infinite; }
+.typing span:nth-child(2) { animation-delay: .15s; }
+.typing span:nth-child(3) { animation-delay: .3s; }
+
+.steps { list-style: none; margin: 0; padding: 0; font-size: 13px; }
+.steps li { display: flex; gap: 8px; align-items: center; padding: 2px 0; color: var(--muted); }
+.steps li.done { color: var(--text); }
+.ico { width: 16px; height: 16px; flex: none; display: grid; place-items: center; }
+.spin { width: 12px; height: 12px; border: 2px solid var(--line); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; }
+.check { color: var(--ok); animation: pop .25s ease-out both; }
+
+.card {
+  position: relative; width: 100%; max-width: 360px; background: var(--surface);
+  border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; overflow: hidden;
+}
+.card h3 { margin: 0 0 10px; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+.kv { display: grid; grid-template-columns: 64px 1fr; gap: 4px 8px; font-size: 13px; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; }
+.price { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; margin: 12px 0 4px; }
+.price b { font-size: 24px; font-weight: 600; }
+.price s { color: var(--faint); font-size: 13px; }
+.pill { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 999px; }
+.pill.ok { background: var(--ok-soft); color: var(--ok); }
+.pill.warn { background: var(--warn-soft); color: var(--warn); }
+.actions { display: flex; gap: 8px; margin-top: 12px; }
+.btn {
+  font: inherit; font-size: 13px; padding: 6px 16px; border-radius: 999px; cursor: pointer;
+  border: 1px solid var(--line); background: transparent; color: var(--text); transition: background .15s;
+}
+.btn:hover { background: var(--bubble); }
+.btn.primary { background: var(--text); color: var(--bg); border-color: var(--text); }
+.btn.primary.pulse { animation: pulse 1.4s ease-in-out infinite; }
+.btn:disabled { opacity: .45; cursor: default; animation: none; }
+
+.stamp {
+  position: absolute; right: 16px; bottom: 14px; padding: 4px 10px; border: 2px solid var(--ok); color: var(--ok);
+  border-radius: 8px; font-weight: 700; font-size: 15px; letter-spacing: 2px; transform: rotate(-12deg);
+  animation: stamp .45s cubic-bezier(.2, 1.6, .4, 1) both; background: var(--surface);
+}
+.flash { animation: flash .6s ease-out; }
+
+.quote { border-left: 3px solid var(--accent); padding: 2px 0 2px 10px; margin: 6px 0 10px; font-size: 14px; }
+.link { display: inline-block; font-size: 13px; color: var(--accent); border: 1px dashed var(--accent); border-radius: 8px; padding: 3px 10px; margin-top: 6px; }
+
+.track { margin-top: 6px; }
+.bar { height: 6px; background: var(--line); border-radius: 999px; overflow: hidden; margin: 8px 0 6px; }
+.bar i { display: block; height: 100%; width: 0; background: var(--ok); border-radius: 999px; transition: width .7s ease; }
+.track-steps { display: flex; justify-content: space-between; font-size: 12px; color: var(--faint); }
+.track-steps span.on { color: var(--text); }
+.track-now { font-size: 13px; margin-top: 6px; }
+
+.toast {
+  position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px); opacity: 0;
+  background: var(--text); color: var(--bg); padding: 6px 16px; border-radius: 999px; font-size: 13px;
+  transition: opacity .2s, transform .2s; pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+.features { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 32px 0 0; }
+.feature { border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; background: var(--surface); }
+.feature b { display: block; font-weight: 600; margin-bottom: 4px; }
+.feature span { color: var(--muted); font-size: 13px; }
+.more { margin-top: 24px; font-size: 14px; }
+.more a { color: var(--text); }
+footer { margin-top: 28px; color: var(--faint); font-size: 12px; line-height: 1.8; }
+
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes blink { 0%, 80%, 100% { opacity: .25; } 40% { opacity: 1; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pop { from { transform: scale(.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(232, 118, 26, .45); } 50% { box-shadow: 0 0 0 6px rgba(232, 118, 26, 0); } }
+@keyframes stamp { from { transform: rotate(-12deg) scale(2.4); opacity: 0; } to { transform: rotate(-12deg) scale(1); opacity: 1; } }
+@keyframes flash { 0% { background: var(--accent-soft); } 100% { background: var(--surface); } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+@media (max-width: 480px) {
+  main { padding-top: 28px; }
+  header h1 { font-size: 22px; }
+  .phone { height: 72vh; }
+  .bubble { max-width: 88%; }
+  .controls { display: grid; grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>见麦如面</h1>
+    <p>人在远方，一餐替我回家。</p>
+    <p class="sub">给家里人点麦当劳外送：记得每个人的地址和口味，按约好的时间送到。</p>
+    <span class="tag">演示页面 · 示例数据，不会真的下单</span>
+  </header>
+
+  <div class="controls" role="group" aria-label="选择演示场景">
+    <button class="chip" data-scene="mom" aria-pressed="true">妈妈的早餐</button>
+    <button class="chip" data-scene="dad" aria-pressed="false">爸爸的夜宵</button>
+    <button class="chip" data-scene="sis" aria-pressed="false">妹妹的午饭</button>
+    <button class="chip" data-scene="love" aria-pressed="false">对象的下午茶</button>
+  </div>
+
+  <section class="phone" aria-label="对话演示">
+    <div class="phone-top"><span class="avatar">麦</span>见麦如面<small id="clock">现在</small><button class="chip" id="replay">重播</button></div>
+    <div class="chat" id="chat" aria-live="polite"></div>
+  </section>
+
+  <section class="features">
+    <div class="feature"><b>记住家里每个人</b><span>地址、口味、忌口记一次，下次只说"给爸爸送夜宵"。</span></div>
+    <div class="feature"><b>预约送达</b><span>早餐、夜宵提前约好，菜单按送达时段切换。</span></div>
+    <div class="feature"><b>用券算价</b><span>查券，逐个方案核价，选实付最低的。</span></div>
+    <div class="feature"><b>写好消息</b><span>下单后写一条消息，转给家人就行。</span></div>
+  </section>
+
+  <p class="more">在 WorkBuddy、Claude Code 等 AI 助手里安装使用：<a href="https://github.com/Remenber-hxh/mcd-feed">GitHub · mcd-feed</a></p>
+
+  <footer>
+    演示中的人名、地址、门店、价格均为虚构。<br>
+    本项目为麦当劳程序员创意开发大赛参赛作品，由个人独立开发，非麦当劳官方产品。
+  </footer>
+</main>
+<div class="toast" id="toast">已复制</div>
+
+<script>
+const SCENES = {
+  mom: {
+    to: "妈妈",
+    clock: "前一天 21:30",
+    say: "明早 8 点给我妈送份早餐，跟她说天冷了多穿点",
+    steps: [
+      "读取档案：妈妈 · 爱吃猪柳蛋麦满分 · 不吃洋葱",
+      "找到收货地址：清竹园",
+      "找到能送的门店：清竹园店",
+      "查看明早 08:00 的早餐菜单",
+      "领券并核价 3 个方案"
+    ],
+    plans: [
+      { meal: "猪柳蛋麦满分套餐", detail: "猪柳蛋麦满分 · 薯饼 · 热豆浆", note: "不要洋葱", orig: 24, pay: 15, coupons: 1 },
+      { meal: "火腿扒麦满分套餐", detail: "火腿扒麦满分 · 薯饼 · 热牛奶", note: "不要洋葱", orig: 22, pay: 14, coupons: 1 }
+    ],
+    where: "清竹园 · 138****5678",
+    when: "明天 08:00 左右",
+    remark: "放门口，不用敲门",
+    message: "妈，我给你点了麦当劳早餐，明早 8 点左右送到，记得开门。天冷了多穿点。",
+    track: [["已接单", "07:20"], ["制作中", "07:31"], ["配送中", "07:38"], ["已送达", "07:54"]]
+  },
+  dad: {
+    to: "爸爸",
+    clock: "今天 21:50",
+    say: "今晚 11 点给我爸送份夜宵，他今天加班",
+    steps: [
+      "读取档案：爸爸 · 爱吃麦辣鸡腿堡 · 不喝冰的",
+      "找到收货地址：东区工业园",
+      "找到能送的门店：工业园店",
+      "查看 23:00 的夜间菜单",
+      "领券并核价 3 个方案"
+    ],
+    plans: [
+      { meal: "麦辣鸡腿堡套餐", detail: "麦辣鸡腿堡 · 中薯条 · 中可乐", note: "可乐去冰", orig: 39, pay: 27, coupons: 2 },
+      { meal: "板烧鸡腿堡套餐", detail: "板烧鸡腿堡 · 中薯条 · 中可乐", note: "可乐去冰", orig: 37, pay: 26, coupons: 2 }
+    ],
+    where: "东区工业园 · 139****2210",
+    when: "今天 23:00 左右",
+    remark: "送到门卫室，到了打电话",
+    message: "爸，给你点了份夜宵，11 点左右送到门卫室，记得接电话。别忙太晚。",
+    track: [["已接单", "22:35"], ["制作中", "22:41"], ["配送中", "22:47"], ["已送达", "23:03"]]
+  },
+  sis: {
+    to: "妹妹",
+    clock: "周五 20:10",
+    say: "周六中午给我妹送顿饭，她下午月考",
+    steps: [
+      "读取档案：妹妹 · 爱吃麦乐鸡 · 不吃辣",
+      "找到收货地址：清竹园",
+      "找到能送的门店：清竹园店",
+      "查看周六 12:00 的午餐菜单",
+      "领券并核价 3 个方案"
+    ],
+    plans: [
+      { meal: "麦乐鸡套餐 + 玉米杯", detail: "10 块麦乐鸡 · 中薯条 · 玉米杯 · 中雪碧", note: "配番茄酱，不要辣酱", orig: 45, pay: 31, coupons: 2 },
+      { meal: "板烧鸡腿堡套餐", detail: "板烧鸡腿堡 · 中薯条 · 中雪碧", note: "不辣", orig: 37, pay: 25, coupons: 1 }
+    ],
+    where: "清竹园 · 135****8846",
+    when: "周六 12:00 左右",
+    remark: "放门口，敲两下门",
+    message: "妹，周六中午给你点了麦当劳，12 点左右送到家。下午好好考，别紧张。",
+    track: [["已接单", "11:20"], ["制作中", "11:32"], ["配送中", "11:40"], ["已送达", "11:56"]]
+  },
+  love: {
+    to: "对象",
+    clock: "今天 13:20",
+    say: "下午 3 点给对象送份下午茶，他最近总熬夜",
+    steps: [
+      "读取档案：对象 · 爱喝拿铁 · 不吃辣",
+      "找到收货地址：科技园 B 座",
+      "找到能送的门店：科技园店",
+      "查看 15:00 的麦咖啡菜单",
+      "领券并核价 2 个方案"
+    ],
+    plans: [
+      { meal: "拿铁（大杯）+ 香芋派", detail: "麦咖啡拿铁 · 香芋派", note: "拿铁少糖", orig: 31, pay: 19, coupons: 1 },
+      { meal: "美式咖啡（大杯）+ 苹果派", detail: "麦咖啡美式 · 苹果派", note: "不加糖", orig: 28, pay: 18, coupons: 1 }
+    ],
+    where: "科技园 B 座 · 186****7301",
+    when: "今天 15:00 左右",
+    remark: "放公司前台",
+    message: "给你点了下午茶，3 点左右送到前台。今晚早点睡。",
+    track: [["已接单", "14:25"], ["制作中", "14:31"], ["配送中", "14:38"], ["已送达", "14:57"]]
+  }
+};
+
+const chat = document.getElementById("chat");
+const clock = document.getElementById("clock");
+const toast = document.getElementById("toast");
+const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+let run = 0;
+
+class Stopped extends Error {}
+
+function sleep(ms, id) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => (id === run ? resolve() : reject(new Stopped())), reduced ? Math.min(ms, 60) : ms);
+  });
+}
+
+function el(tag, cls, html) {
+  const node = document.createElement(tag);
+  if (cls) node.className = cls;
+  if (html !== undefined) node.innerHTML = html;
+  return node;
+}
+
+function scrollDown() {
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function addRow(who, content) {
+  const row = el("div", "row " + who);
+  if (who === "bot") row.appendChild(el("span", "avatar", "麦"));
+  const bubble = el("div", "bubble");
+  if (typeof content === "string") bubble.textContent = content;
+  else bubble.appendChild(content);
+  row.appendChild(bubble);
+  chat.appendChild(row);
+  scrollDown();
+  return { row, bubble };
+}
+
+function addCard(node) {
+  const row = el("div", "row bot");
+  row.appendChild(el("span", "avatar", "麦"));
+  row.appendChild(node);
+  chat.appendChild(row);
+  scrollDown();
+  return row;
+}
+
+async function typing(id, ms) {
+  const t = el("div", "typing", "<span></span><span></span><span></span>");
+  const { row } = addRow("bot", t);
+  try {
+    await sleep(ms, id);
+  } finally {
+    row.remove();
+  }
+}
+
+async function showSteps(id, steps) {
+  const list = el("ul", "steps");
+  addRow("bot", list);
+  for (const text of steps) {
+    const li = el("li", "", `<span class="ico"><span class="spin"></span></span><span></span>`);
+    li.lastChild.textContent = text;
+    list.appendChild(li);
+    scrollDown();
+    await sleep(650, id);
+    li.firstChild.innerHTML = `<span class="check">✓</span>`;
+    li.classList.add("done");
+  }
+}
+
+function money(n) {
+  return "¥" + n.toFixed(1);
+}
+
+function renderPlan(card, s, plan) {
+  card.querySelector("[data-meal]").textContent = plan.meal;
+  card.querySelector("[data-detail]").textContent = plan.detail + "（" + plan.note + "）";
+  card.querySelector("[data-pay]").textContent = money(plan.pay);
+  card.querySelector("[data-orig]").textContent = money(plan.orig);
+  card.querySelector("[data-save]").textContent = `用了 ${plan.coupons} 张券 · 省 ${money(plan.orig - plan.pay)}`;
+}
+
+function confirmCard(s) {
+  const card = el("div", "card");
+  card.innerHTML = `
+    <h3>下单确认</h3>
+    <dl class="kv">
+      <dt>收餐人</dt><dd></dd>
+      <dt>送达</dt><dd></dd>
+      <dt>餐品</dt><dd><span data-meal></span><br><span data-detail style="color:var(--muted);font-size:12px"></span></dd>
+      <dt>备注</dt><dd></dd>
+    </dl>
+    <div class="price"><b data-pay></b><s data-orig></s><span class="pill ok" data-save></span></div>
+    <div class="actions">
+      <button class="btn primary pulse" data-ok>好，下单</button>
+      <button class="btn" data-swap>换一个</button>
+    </div>`;
+  const dds = card.querySelectorAll("dd");
+  dds[0].textContent = `${s.to}（${s.where}）`;
+  dds[1].textContent = s.when;
+  dds[3].textContent = s.remark;
+  renderPlan(card, s, s.plans[0]);
+  return card;
+}
+
+function waitChoice(card, id, autoMs) {
+  return new Promise((resolve, reject) => {
+    const ok = card.querySelector("[data-ok]");
+    const swap = card.querySelector("[data-swap]");
+    let timer;
+    const done = (v) => {
+      clearTimeout(timer);
+      ok.onclick = swap.onclick = null;
+      if (id !== run) reject(new Stopped());
+      else resolve(v);
+    };
+    ok.onclick = () => done("ok");
+    swap.onclick = () => done("swap");
+    timer = setTimeout(() => done("ok"), reduced ? 1500 : autoMs);
+  });
+}
+
+function messageCard(s) {
+  const card = el("div", "card");
+  card.innerHTML = `<h3>转给${s.to}</h3><div class="quote"></div><button class="btn">复制这条消息</button>`;
+  card.querySelector(".quote").textContent = s.message;
+  card.querySelector("button").onclick = async () => {
+    try {
+      await navigator.clipboard.writeText(s.message);
+      toast.textContent = "已复制";
+    } catch {
+      toast.textContent = "复制失败，请手动选择文字";
+    }
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 1400);
+  };
+  return card;
+}
+
+function trackCard(s) {
+  const card = el("div", "card");
+  card.innerHTML = `<h3>配送进度</h3>
+    <div class="track"><div class="bar"><i></i></div>
+    <div class="track-steps">${s.track.map(([name]) => `<span>${name}</span>`).join("")}</div>
+    <div class="track-now"></div></div>`;
+  return card;
+}
+
+async function play(key) {
+  const id = ++run;
+  const s = SCENES[key];
+  chat.innerHTML = "";
+  clock.textContent = s.clock;
+  try {
+    await sleep(500, id);
+    addRow("me", s.say);
+    await sleep(500, id);
+    await showSteps(id, s.steps);
+    await typing(id, 600);
+
+    const card = confirmCard(s);
+    addCard(card);
+    let plan = 0;
+    while ((await waitChoice(card, id, 6000)) === "swap") {
+      addRow("me", "换一个");
+      await typing(id, 700);
+      plan = (plan + 1) % s.plans.length;
+      renderPlan(card, s, s.plans[plan]);
+      card.classList.remove("flash");
+      void card.offsetWidth;
+      card.classList.add("flash");
+      addRow("bot", `换成了${s.plans[plan].meal}，价格已重新核算，看上面的卡片。`);
+    }
+
+    card.querySelectorAll("button").forEach((b) => (b.disabled = true));
+    addRow("me", "好");
+    await sleep(400, id);
+    card.appendChild(el("div", "stamp", "已下单"));
+    await sleep(700, id);
+    const paid = el("div", "", "已下单，付完款回我“付好了”。<br>");
+    paid.appendChild(el("span", "link", "付款链接（演示）"));
+    addRow("bot", paid);
+    await sleep(900, id);
+    addCard(messageCard(s));
+    await sleep(1600, id);
+
+    addRow("me", "付好了，送到了吗？");
+    await typing(id, 600);
+    const track = trackCard(s);
+    addCard(track);
+    const bar = track.querySelector(".bar i");
+    const labels = track.querySelectorAll(".track-steps span");
+    const now = track.querySelector(".track-now");
+    for (let i = 0; i < s.track.length; i++) {
+      await sleep(i === 0 ? 300 : 900, id);
+      bar.style.width = ((i + 1) / s.track.length) * 100 + "%";
+      labels[i].classList.add("on");
+      now.textContent = `${s.track[i][1]} ${s.track[i][0]}`;
+    }
+    await sleep(500, id);
+    addRow("bot", `已经送到${s.to}那儿了。`);
+  } catch (e) {
+    if (!(e instanceof Stopped)) throw e;
+  }
+}
+
+const chips = document.querySelectorAll(".chip[data-scene]");
+let current = "mom";
+chips.forEach((chip) => {
+  chip.addEventListener("click", () => {
+    current = chip.dataset.scene;
+    chips.forEach((c) => c.setAttribute("aria-pressed", String(c === chip)));
+    play(current);
+  });
+});
+document.getElementById("replay").addEventListener("click", () => play(current));
+play(current);
+</script>
+</body>
+</html>

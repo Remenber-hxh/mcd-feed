@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.env
+.mcd-feed/
+people.json
+probe-out/
