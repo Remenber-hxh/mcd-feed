@@ -54,8 +54,6 @@ body {
 main { max-width: 560px; margin: 0 auto; padding: 40px 16px 32px; }
 header h1 { font-size: 26px; font-weight: 600; margin: 0 0 6px; letter-spacing: 0.5px; }
 header p { margin: 0; color: var(--muted); }
-header p.sub { font-size: 14px; color: var(--faint); margin-top: 2px; }
-.tag { display: inline-block; font-size: 12px; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 1px 10px; margin-top: 12px; }
 
 .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 12px; align-items: center; }
 .chip {
@@ -148,10 +146,6 @@ header p.sub { font-size: 14px; color: var(--faint); margin-top: 2px; }
 }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
-.features { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 32px 0 0; }
-.feature { border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; background: var(--surface); }
-.feature b { display: block; font-weight: 600; margin-bottom: 4px; }
-.feature span { color: var(--muted); font-size: 13px; }
 .more { margin-top: 24px; font-size: 14px; }
 .more a { color: var(--text); }
 footer { margin-top: 28px; color: var(--faint); font-size: 12px; line-height: 1.8; }
@@ -180,8 +174,6 @@ footer { margin-top: 28px; color: var(--faint); font-size: 12px; line-height: 1.
   <header>
     <h1>见麦如面</h1>
     <p>人在远方，一餐替我回家。</p>
-    <p class="sub">给家里人点麦当劳外送：记得每个人的地址和口味，按约好的时间送到。</p>
-    <span class="tag">演示页面 · 示例数据，不会真的下单</span>
   </header>
 
   <div class="controls" role="group" aria-label="选择演示场景">
@@ -194,13 +186,6 @@ footer { margin-top: 28px; color: var(--faint); font-size: 12px; line-height: 1.
   <section class="phone" aria-label="对话演示">
     <div class="phone-top"><span class="avatar">麦</span>见麦如面<small id="clock">现在</small><button class="chip" id="replay">重播</button></div>
     <div class="chat" id="chat" aria-live="polite"></div>
-  </section>
-
-  <section class="features">
-    <div class="feature"><b>记住家里每个人</b><span>地址、口味、忌口记一次，下次只说"给爸爸送夜宵"。</span></div>
-    <div class="feature"><b>预约送达</b><span>早餐、夜宵提前约好，菜单按送达时段切换。</span></div>
-    <div class="feature"><b>用券算价</b><span>查券，逐个方案核价，选实付最低的。</span></div>
-    <div class="feature"><b>写好消息</b><span>下单后写一条消息，转给家人就行。</span></div>
   </section>
 
   <p class="more">在 WorkBuddy、Claude Code 等 AI 助手里安装使用：<a href="https://github.com/Remenber-hxh/mcd-feed">GitHub · mcd-feed</a></p>
