@@ -1,6 +1,6 @@
 # 见麦如面
 
-[![在线演示](https://img.shields.io/badge/%E5%9C%A8%E7%BA%BF%E6%BC%94%E7%A4%BA-%E7%AB%8B%E5%8D%B3%E4%BD%93%E9%AA%8C-ff6f00?style=flat-square&labelColor=b74f00)](https://remenber-hxh.github.io/mcd-feed/) [![技能包](https://img.shields.io/badge/%E6%8A%80%E8%83%BD%E5%8C%85-%E4%B8%8B%E8%BD%BD_zip-2ea44f?style=flat-square&labelColor=217638&logo=github&logoColor=white)](https://github.com/Remenber-hxh/mcd-feed/releases/latest/download/mcd-feed.zip) [![WorkBuddy](https://img.shields.io/badge/WorkBuddy-%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B-1677ff?style=flat-square&labelColor=0f55b7)](INSTALL.md) [![麦当劳 MCP](https://img.shields.io/badge/%E9%BA%A6%E5%BD%93%E5%8A%B3_MCP-35_%E4%B8%AA%E5%B7%A5%E5%85%B7-e53935?style=flat-square&labelColor=a42926)](MCP_INTEGRATION.md) [![Python](https://img.shields.io/badge/Python-3.10%2B-3776ab?style=flat-square&labelColor=27547b&logo=python&logoColor=white)](#安装) [![版本](https://img.shields.io/github/v/release/Remenber-hxh/mcd-feed?style=flat-square&color=00b4d8&labelColor=00819b&label=%E7%89%88%E6%9C%AC)](https://github.com/Remenber-hxh/mcd-feed/releases) [![许可证](https://img.shields.io/github/license/Remenber-hxh/mcd-feed?style=flat-square&color=8957e5&labelColor=623ea4&label=%E8%AE%B8%E5%8F%AF%E8%AF%81)](LICENSE)
+[![在线演示](https://img.shields.io/badge/%E5%9C%A8%E7%BA%BF%E6%BC%94%E7%A4%BA-%E7%AB%8B%E5%8D%B3%E4%BD%93%E9%AA%8C-ff6f00?style=flat-square&labelColor=b74f00)](https://remenber-hxh.github.io/mcd-feed/) [![技能包](https://img.shields.io/badge/%E6%8A%80%E8%83%BD%E5%8C%85-%E4%B8%8B%E8%BD%BD_zip-2ea44f?style=flat-square&labelColor=217638&logo=github&logoColor=white)](https://github.com/Remenber-hxh/mcd-feed/releases/latest/download/mcd-feed.zip) [![WorkBuddy](https://img.shields.io/badge/WorkBuddy-%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B-1677ff?style=flat-square&labelColor=0f55b7)](INSTALL.md) [![麦当劳 MCP](https://img.shields.io/badge/%E9%BA%A6%E5%BD%93%E5%8A%B3_MCP-35_%E4%B8%AA%E5%B7%A5%E5%85%B7-e53935?style=flat-square&labelColor=a42926)](MCP_INTEGRATION.md) [![Python](https://img.shields.io/badge/Python-3.10%2B-3776ab?style=flat-square&labelColor=27547b&logo=python&logoColor=white)](#-安装) [![版本](https://img.shields.io/github/v/release/Remenber-hxh/mcd-feed?style=flat-square&color=00b4d8&labelColor=00819b&label=%E7%89%88%E6%9C%AC)](https://github.com/Remenber-hxh/mcd-feed/releases) [![许可证](https://img.shields.io/github/license/Remenber-hxh/mcd-feed?style=flat-square&color=8957e5&labelColor=623ea4&label=%E8%AE%B8%E5%8F%AF%E8%AF%81)](LICENSE) ![访问量](https://komarev.com/ghpvc/?username=Remenber-hxh-mcd-feed&label=%E8%AE%BF%E9%97%AE%E9%87%8F&color=ff69b4&style=flat-square)
 
 人在远方，一餐替我回家。
 
@@ -10,24 +10,26 @@
 
 在线演示（示例数据，不需要安装）：[remenber-hxh.github.io/mcd-feed](https://remenber-hxh.github.io/mcd-feed/)
 
-## 功能
+<p align="center"><img src="docs/assets/demo.gif" alt="演示：给妈妈预约一份早餐" width="380"></p>
+
+## ✨ 功能
 
 | 功能 | 说明 |
 |---|---|
-| 送餐上门 | 早餐、夜宵、考前那顿饭都能预约送达，菜单按送达时段切换 |
-| 到店或得来速取餐 | 家人顺路自己去拿，取餐码直接发给他 |
-| 给单位、班级点团餐 | 按人数和人均预算搭配，自动算满减值不值得凑单 |
-| 照顾健康 | 家人控糖、少盐、在减脂，用麦当劳的营养数据挑餐 |
-| 用券算价 | 经你同意领券，逐个方案核价，选实付最低的 |
-| 积分换礼物 | 查快过期的积分，换周边、礼品卡寄到家人那儿 |
-| 生日会和活动 | 查活动日历，给家人预约麦当劳生日会、主题派对 |
-| 记住家里每个人 | 地址、口味、忌口、健康注意、生日记一次，下次只说"给爸爸送夜宵" |
-| 写好消息 | 下单后写一条消息，告诉家人几点送到、在哪取 |
-| 跟进订单 | 问"送到了吗"、取消订单、看之前点过什么 |
+| 🛵 送餐上门 | 早餐、夜宵、考前那顿饭都能预约送达，菜单按送达时段切换 |
+| 🚗 到店或得来速取餐 | 家人顺路自己去拿，取餐码直接发给他 |
+| 👥 给单位、班级点团餐 | 按人数和人均预算搭配，自动算满减值不值得凑单 |
+| 🥗 照顾健康 | 家人控糖、少盐、在减脂，用麦当劳的营养数据挑餐 |
+| 🎟️ 用券算价 | 经你同意领券，逐个方案核价，选实付最低的 |
+| 🎁 积分换礼物 | 查快过期的积分，换周边、礼品卡寄到家人那儿 |
+| 🎂 生日会和活动 | 查活动日历，给家人预约麦当劳生日会、主题派对 |
+| 📒 记住家里每个人 | 地址、口味、忌口、健康注意、生日记一次，下次只说"给爸爸送夜宵" |
+| 💌 写好消息 | 下单后写一条消息，告诉家人几点送到、在哪取 |
+| 🔔 跟进订单 | 问"送到了吗"、取消订单、看之前点过什么 |
 
 下单、兑换、预约、抽奖前都会先给你确认，付款由你自己完成。麦当劳 MCP 的 35 个工具全部接入，明细见 [MCP_INTEGRATION.md](MCP_INTEGRATION.md)。
 
-## 使用示例
+## 💬 使用示例
 
 ```
 你：明早 8 点给我妈送份早餐，跟她说天冷了多穿点
@@ -59,11 +61,11 @@
 
 示例中的人名、地址、价格均为虚构。
 
-## 适合谁
+## 🎯 适合谁
 
 离家在外工作、上学或常出差，想照顾家里人的人。
 
-## 安装
+## 📦 安装
 
 WorkBuddy 用户看 **[安装教程](INSTALL.md)**，大约 5 分钟：申请 Token → 添加麦当劳连接器 → 上传技能包 [mcd-feed.zip](https://github.com/Remenber-hxh/mcd-feed/releases/latest/download/mcd-feed.zip)。
 
@@ -71,7 +73,7 @@ WorkBuddy 用户看 **[安装教程](INSTALL.md)**，大约 5 分钟：申请 To
 
 运行环境：Python 3.10 及以上，仅使用标准库。
 
-## 隐私与安全
+## 🔒 隐私与安全
 
 - 家人的手机号和详细地址只保存在你自己的麦当劳账户里。
 - 本机档案 `~/.mcd-feed/people.json` 只记称呼、联系人姓名、小区名、口味、忌口、健康注意、生日和常去门店，不进仓库。
@@ -79,7 +81,7 @@ WorkBuddy 用户看 **[安装教程](INSTALL.md)**，大约 5 分钟：申请 To
 - 不代付，不主动取消订单，不主动抽奖；下单、兑换、预约前都要你确认。
 - 仓库内不含真实 Token，配置文件只使用环境变量占位符。
 
-## 目录结构
+## 🗂️ 目录结构
 
 ```
 mcd-feed/
@@ -99,13 +101,15 @@ mcd-feed/
 │   │   ├── events.md             活动日历、生日会
 │   │   └── after-order.md        订单跟进
 │   └── scripts/people.py         家人档案管理
-└── docs/index.html               在线演示页
+└── docs/
+    ├── index.html                在线演示页
+    └── assets/demo.gif           演示动图
 ```
 
-## 声明
+## 📜 声明
 
 麦当劳程序员创意开发大赛参赛作品，个人独立开发，非麦当劳官方产品。餐品、价格及供应状态以麦当劳官方渠道的实时结果为准。详见 [CONTEST_DECLARATION.md](CONTEST_DECLARATION.md)。
 
-## 许可证
+## 📄 许可证
 
 [MIT](LICENSE)
