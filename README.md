@@ -1,5 +1,7 @@
 # 见麦如面
 
+[![在线演示](https://img.shields.io/badge/%E5%9C%A8%E7%BA%BF%E6%BC%94%E7%A4%BA-%E7%AB%8B%E5%8D%B3%E4%BD%93%E9%AA%8C-ff6f00?style=flat-square&labelColor=b74f00)](https://remenber-hxh.github.io/mcd-feed/) [![技能包](https://img.shields.io/badge/%E6%8A%80%E8%83%BD%E5%8C%85-%E4%B8%8B%E8%BD%BD_zip-2ea44f?style=flat-square&labelColor=217638&logo=github&logoColor=white)](https://github.com/Remenber-hxh/mcd-feed/releases/latest/download/mcd-feed.zip) [![WorkBuddy](https://img.shields.io/badge/WorkBuddy-%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B-1677ff?style=flat-square&labelColor=0f55b7)](INSTALL.md) [![麦当劳 MCP](https://img.shields.io/badge/%E9%BA%A6%E5%BD%93%E5%8A%B3_MCP-35_%E4%B8%AA%E5%B7%A5%E5%85%B7-e53935?style=flat-square&labelColor=a42926)](MCP_INTEGRATION.md) [![Python](https://img.shields.io/badge/Python-3.10%2B-3776ab?style=flat-square&labelColor=27547b&logo=python&logoColor=white)](#安装) [![版本](https://img.shields.io/github/v/release/Remenber-hxh/mcd-feed?style=flat-square&color=00b4d8&labelColor=00819b&label=%E7%89%88%E6%9C%AC)](https://github.com/Remenber-hxh/mcd-feed/releases) [![许可证](https://img.shields.io/github/license/Remenber-hxh/mcd-feed?style=flat-square&color=8957e5&labelColor=623ea4&label=%E8%AE%B8%E5%8F%AF%E8%AF%81)](LICENSE)
+
 人在远方，一餐替我回家。
 
 见麦如面是一个 AI 技能，帮在外地的人给家里点麦当劳。你只管说"明早 8 点给我妈送份早餐"，剩下的交给它。
