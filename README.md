@@ -10,7 +10,7 @@
 
 在线演示（示例数据，不需要安装）：[remenber-hxh.github.io/mcd-feed](https://remenber-hxh.github.io/mcd-feed/)
 
-<p align="center"><img src="docs/assets/demo.gif" alt="演示：给妈妈预约一份早餐" width="380"></p>
+<p align="center"><a href="https://remenber-hxh.github.io/mcd-feed/"><img src="docs/assets/demo.gif" alt="演示：给妈妈预约一份早餐" width="380"></a><br><sub>点图片打开可以交互的演示</sub></p>
 
 ## ✨ 功能
 
