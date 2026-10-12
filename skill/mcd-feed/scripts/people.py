@@ -8,7 +8,7 @@ import argparse
 import json
 import os
 import sys
-from datetime import datetime
+from datetime import date, datetime
 from pathlib import Path
 
 USUAL_LIMIT = 5
@@ -65,6 +65,12 @@ def cmd_set(people: dict, args) -> dict:
         p["likes"] = split_list(args.likes)
     if args.avoid is not None:
         p["avoid"] = split_list(args.avoid)
+    if args.health is not None:
+        p["health"] = split_list(args.health)
+    if args.birthday is not None:
+        p["birthday"] = args.birthday
+    if args.store is not None:
+        p["store"] = args.store
     if args.note is not None:
         p["note"] = args.note
     save(people)
@@ -86,6 +92,23 @@ def cmd_log(people: dict, args) -> dict:
     return {"saved": True, "name": args.name, "usual": p["usual"], "times": len(history)}
 
 
+def cmd_birthdays(people: dict, args) -> dict:
+    today = date.today()
+    upcoming = []
+    for name, p in people.items():
+        try:
+            month, day = (int(x) for x in p.get("birthday", "").split("-"))
+            nxt = date(today.year, month, day)
+            if nxt < today:
+                nxt = nxt.replace(year=today.year + 1)
+        except ValueError:
+            continue
+        days = (nxt - today).days
+        if days <= args.days:
+            upcoming.append({"name": name, "birthday": nxt.isoformat(), "in_days": days})
+    return {"upcoming": sorted(upcoming, key=lambda x: x["in_days"])}
+
+
 def cmd_remove(people: dict, args) -> dict:
     existed = people.pop(args.name, None) is not None
     if existed:
@@ -94,6 +117,7 @@ def cmd_remove(people: dict, args) -> dict:
 
 
 def main(argv: list[str] | None = None) -> int:
+    sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(prog="people.py", description="见麦如面 · 家人档案")
     sub = parser.add_subparsers(dest="cmd", required=True)
 
@@ -108,20 +132,25 @@ def main(argv: list[str] | None = None) -> int:
     p_set.add_argument("--place", help="小区或楼宇名，用来区分同名联系人的多个地址")
     p_set.add_argument("--likes", help="爱吃的，逗号分隔")
     p_set.add_argument("--avoid", help="不吃的，逗号分隔")
+    p_set.add_argument("--health", help="健康注意事项，逗号分隔，如 控糖,少盐,低热量")
+    p_set.add_argument("--birthday", help="生日，MM-DD")
+    p_set.add_argument("--store", help="到店取餐常去的门店或地点关键词")
     p_set.add_argument("--note", help="其他备注，比如作息")
 
     p_log = sub.add_parser("log", help="记录一次下单")
     p_log.add_argument("name")
     p_log.add_argument("meal")
 
+    p_bd = sub.add_parser("birthdays", help="列出最近要过生日的家人")
+    p_bd.add_argument("--days", type=int, default=30, help="往后看多少天，默认 30")
+
     p_rm = sub.add_parser("remove", help="删除某人档案")
     p_rm.add_argument("name")
 
     args = parser.parse_args(argv)
-    handlers = {"list": cmd_list, "show": cmd_show, "set": cmd_set, "log": cmd_log, "remove": cmd_remove}
+    handlers = {"list": cmd_list, "show": cmd_show, "set": cmd_set, "log": cmd_log,
+                "birthdays": cmd_birthdays, "remove": cmd_remove}
     result = handlers[args.cmd](load(), args)
-
-    sys.stdout.reconfigure(encoding="utf-8")
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 0
 
